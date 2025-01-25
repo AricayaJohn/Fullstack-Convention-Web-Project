@@ -11,9 +11,9 @@ function HomePage() {
             .catch((err) => console.error('Error fetching data:', err));
     }, []);
 
-    const updateConventionAreas = (newArea) => {
-        setConventionAreas((prevAreas) => [...prevAreas, newArea]);
-    };
+    // const updateConventionAreas = (newArea) => {
+    //     setConventionAreas((prevAreas) => [...prevAreas, newArea]);
+    // };
 
     const handleDeleteArea = (id) => {
         setConventionAreas((prevAreas) => prevAreas.filter(area => area.id !== id));
@@ -32,7 +32,12 @@ function HomePage() {
                     <ConventionAreaCard
                         key={area.id}
                         area={area}
+                        onDelete={handleDeleteArea}
+                        onUpdate={handleUpdateArea}
+                    />
                 ))
+            ) : (
+                <p>No Convention areas found.</p>
             )}
         </div>
     )
