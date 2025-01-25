@@ -150,6 +150,24 @@ class Conventions(Resource):
             conventions = Convention.query.all()
         return [convention.to_dict(only('id', 'convention_name', 'days', 'convention_area_id', 'host_company)id')) for convention in conventions]
 
+    def post(self):
+        data = request.get_json()
+        try:
+            new_convention = Convention(
+                convention_name=data['convention_name'],
+                days=data['days'],
+                convention_area_id=data['convention_area_id'],
+                host_company_id=data.get['host_company_id']
+            )
+            db.session.add(new_convention)
+            db.session.commit()
+            return make_response(new_convention.to_dict(), 201)
+        except ValueError as e:
+            print('Error', e)
+            return make_response({'errors': ['validation errors']}, 400)
+
+api.add_resource(Conventions, '/conventions')
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
