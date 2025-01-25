@@ -31,8 +31,20 @@ def add_conventions():
     db.session.add_all([convention1, convention2, convention3])
     db.session.commit()
 
+def seed():
+    print("Clearing data...")
+    clear_data()
+
+    print("Seeding convention areas...")
+    add_convention_areas()
+
+    print("Seeding host companies...")
+    add_host_companies()
+
+    print("Seeding Conventions...")
+    add_conventions()
+
 if __name__ == '__main__':
-    fake = Faker()
     with app.app_context():
-        print("Starting seed...")
-        # Seed code goes here!
+        seed()
+
