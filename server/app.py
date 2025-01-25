@@ -25,7 +25,11 @@ api = Api(app)
 def index():
     return '<h1>Convention Event Manager</h1>'
 
-
+class ConventionAreas(Resource):
+    def get(self):
+        areas = ConventionArea.query.all()
+        return [area.to_dict(only=('id', 'location_name', 'venue')) for area in areas]
+    
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
