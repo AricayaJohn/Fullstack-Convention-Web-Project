@@ -1,4 +1,3 @@
-
 from sqlalchemy.orm import validates
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -13,7 +12,7 @@ class ConventionArea(db.Model, SerializerMixin):
     venue = db.Column(db.String, nullable=False)
 
     conventions = db.relationship('Convention', backref='convention_area', cascade='all,delete-orphan')
-    host_companies = associationproxy('convention', 'host_company')
+    host_companies = association_proxy('conventions', 'host_company')
 
     serialize_rules = ('-conventions.convention_area',)
 
