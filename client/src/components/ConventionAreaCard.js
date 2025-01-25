@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Link} from "react-router-dom";
 
 function ConventionAreaCard({ area, onUpdate, onDelete}) {
-    const [locationName, setLocationName] = useState(area.locationName);
+    const [locationName, setLocationName] = useState(area.location_name);
     const [venue, setVenue] = useState(area.venue);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -37,5 +37,35 @@ function ConventionAreaCard({ area, onUpdate, onDelete}) {
         .catch(error => console.error('Error', error));
     };
 
-    
+    return (
+        <div>
+            {isEditing ? (
+                <div>
+                    <input
+                        type = "text"
+                        value={locationName}
+                        onChange={(e) => setLocationName(e.target.value)}
+                    />
+                    <input 
+                        type = "text"
+                        value={venue}
+                        onChange={(e)=> setVenue(e.target.value)}
+                    />
+                    <button onClick={handleUpdate}>Save</button>
+                    <button onClick={() => setIsEditing(false)}>Cancel</button>
+                </div>
+            ) : (
+                <div>
+                    <h2>{area.location_name}</h2>
+                    <p>{area.venue}</p>
+                    <Link to={`/conventions/${area.id}`}>
+                        View Conventions in {area.location_name}
+                    </Link>
+                    <br/>
+                    <button onClick={() => setIsEditing(true)}> Edit Area</button>
+                    <button onClick={(handleDelete)}>Delete Area</button>
+                </div>
+            )}
+        </div>
+    )
 }
