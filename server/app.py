@@ -116,7 +116,22 @@ class HostCompaniesById(Resource):
             return host.to_dict(), 200
         return {'error': 'HostCompany not found'}, 404
 
-        
+    def patch(self, id):
+        host = HostCompany.query.filter_by(id=id).first()
+        if host:
+            try:
+                data = request.get_json()
+                for attr in data:
+                    setattr(host, attr, data[attr])
+                db.session.add(host)
+                db.session.commit()
+                return make_response(host.to_dict(), 202)
+            except ValueError:
+                return make_response({'errors': ['validation errors']}, 400)
+        else:
+            return make_response(jsonify({'error': 'HostCompany not found'}), 404)
+
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
