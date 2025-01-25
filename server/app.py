@@ -95,10 +95,10 @@ class Hosts(Resource):
                 name=data['name'],
                 industry=data['industry']
             )
-            db.session.add("new_host")
+            db.session.add(new_host)
             db.session.commit()
 
-            convention = convention.query.get(data['convention_id'])
+            convention = Convention.query.get(data['convention_id'])
             if convention:
                 convention.host_company_id = new_host.id
                 db.session.commit()
@@ -140,6 +140,15 @@ class HostCompaniesById(Resource):
         return {'error': 'HostCompany not found'}, 404
 
 api.add_resource(HostCompaniesById, '/hosts/<int:id>')
+
+class Conventions(Resource):
+    def get(self):
+        convention_area_id = request.args.get('convention_area_id', type=int)
+        if convention_area_id:
+            conventions = Convention.query.filter_by(covention_area_id=convention_area_id).all()
+        else:
+            conventions = Convention.query.all()
+        return [convention.to_dict(only('id', 'convention_name', 'days', 'convention_area_id', 'host_company)id')) for convention in conventions]
 
 
 if __name__ == '__main__':
