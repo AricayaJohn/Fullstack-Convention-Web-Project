@@ -1,8 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import HomePage from "./HomePage";
 
 function App() {
-  return <h1>Project Client</h1>;
+  return (
+    <Router>
+      <main>
+        <h1> Convention Event Management</h1>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+        </Switch>
+      </main>
+    </Router>
+  );
 }
 
 export default App;
