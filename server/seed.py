@@ -3,7 +3,7 @@
 from app import app
 from models import db, Convention, ConventionArea, HostCompany
 
-def cleardata():
+def clear_data():
     Convention.query.delete()
     ConventionArea.query.delete()
     HostCompany.query.delete()
