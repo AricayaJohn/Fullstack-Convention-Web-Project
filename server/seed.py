@@ -16,6 +16,14 @@ def add_convention_areas():
     db.session.add_all([area1, area2])
     db.session.commit()
 
+def add_host_companies():
+    company1 = HostCompany(name='TechCorp', industry='Technology')
+    company2 = HostCompany(name='Foodies Inc.', industry='Food & Beverage')
+
+    db.session.add_all([company1, company2])
+    db.session.commit()
+    
+
 
 if __name__ == '__main__':
     fake = Faker()
