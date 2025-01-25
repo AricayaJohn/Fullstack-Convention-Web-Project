@@ -131,6 +131,15 @@ class HostCompaniesById(Resource):
         else:
             return make_response(jsonify({'error': 'HostCompany not found'}), 404)
 
+    def delete(self, id):
+        host = db.session.get(HostCompany, id)
+        if host:
+            db.session.delete(host)
+            db.session.commit()
+            return '', 204
+        return {'error': 'HostCompany not found'}, 404
+
+api.add_resource(HostCompaniesById, '/hosts/<int:id>')
 
 
 if __name__ == '__main__':
