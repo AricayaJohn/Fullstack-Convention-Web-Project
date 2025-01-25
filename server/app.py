@@ -174,7 +174,22 @@ class ConventionsById(Resource):
         if convention:
             return convention.to_dict(), 200
         return {'error': 'Convention not found'}, 404
-        
+
+    def patch(self, id):
+        convention = Convention.query.filter_by(id=id).first()
+        if convention:
+            try:
+                data = request.get_json()
+                for attr in data:
+                    setattr(convention, attr, data[attr])
+                db.session.add(convention)
+                db.session.commit()
+                return make_response(convention.to_dict(), 202)
+            except ValueError:
+                return make_response({'errors': ['validation errors']}, 400)
+        else:
+            return make_response(jsonify({'error': 'Convetion not found'}), 404)
+
 
 
 if __name__ == '__main__':
