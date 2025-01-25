@@ -190,6 +190,15 @@ class ConventionsById(Resource):
         else:
             return make_response(jsonify({'error': 'Convetion not found'}), 404)
 
+    def delete(self, id):
+        convention = db.session.get(Convention, id)
+        if convention:
+            db.session.delete(convention)
+            db.session.commit()
+            return '', 204
+        return {'error': 'Convention not found'}, 404
+
+api.add_resource(ConventionsById, '/conventions/<int:id>')
 
 
 if __name__ == '__main__':
