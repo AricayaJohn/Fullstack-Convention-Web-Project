@@ -19,5 +19,23 @@ function ConventionAreaCard({ area, onUpdate, onDelete}) {
         })
         .catch(error => console.error('Error:', error));
     };
+
+    const handleUpdate = () => {
+        const updatedData = { location_name: locationName, venue: venue};
+        fetch(`/convention_areas/${area.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        })
+        .then(response => response.json())
+        .then(updatedArea => {
+            onUpdate(updatedArea);
+            setIsEditing(false);
+        })
+        .catch(error => console.error('Error', error));
+    };
+
     
 }
