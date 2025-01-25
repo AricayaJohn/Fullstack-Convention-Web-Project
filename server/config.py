@@ -8,8 +8,6 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
-# Local imports
-from models import Convention, ConventionArea, HostCompany
 
 # Instantiate app, set attributes
 app = Flask(__name__)
