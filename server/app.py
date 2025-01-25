@@ -52,7 +52,22 @@ class ConventionAreasById(Resource):
         if area:
             return area.to_dict(), 200
         return {'error': 'ConventionArea not found'}, 404
-        
+    
+    def patch(self, id):
+        area = ConventionArea.query.filter_by(id=id).first()
+        if area:
+            try:
+                data=request.get_json()
+                for attr, value in data.items():
+                    setattr(arrea, attr, value)
+                db.session.add(area)
+                db.session.commit()
+                return make_response(area.to_dict(), 202)
+            except ValueError:
+                return make_response({'error': ['validation errors']}, 400)
+        else:
+            return make_response(jsonify({'error': 'ConventionArea not found'}), 404)
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
