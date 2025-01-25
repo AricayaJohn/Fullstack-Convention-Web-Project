@@ -20,7 +20,7 @@ function ConventionAreaForm({ updateConventionAreas }) {
             throw new Error("Failed to add convention area");
         })
         .then((data) => {
-            updatingConventionAreas(data);
+            updateConventionAreas(data);
             setLocationName("");
             setVenue("");
         })
@@ -54,5 +54,7 @@ function ConventionAreaForm({ updateConventionAreas }) {
                 <button type="submit">Submit</button>
             </form>
         </div>
-    )
+    );
 }
+
+export default ConventionAreaForm;

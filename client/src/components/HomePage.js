@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import ConventionAreaCard from "./ConventionAreaCard";
+import ConventionAreaForm from "./ConventionAreaForm";
 
 function HomePage() {
     const [conventionAreas, setConventionAreas] = useState([])
@@ -11,9 +12,9 @@ function HomePage() {
             .catch((err) => console.error('Error fetching data:', err));
     }, []);
 
-    // const updateConventionAreas = (newArea) => {
-    //     setConventionAreas((prevAreas) => [...prevAreas, newArea]);
-    // };
+    const updateConventionAreas = (newArea) => {
+        setConventionAreas((prevAreas) => [...prevAreas, newArea]);
+    };
 
     const handleDeleteArea = (id) => {
         setConventionAreas((prevAreas) => prevAreas.filter(area => area.id !== id));
@@ -39,6 +40,7 @@ function HomePage() {
             ) : (
                 <p>No Convention areas found.</p>
             )}
+            <ConventionAreaForm updateConventionAreas={updateConventionAreas} />
         </div>
     )
 }
