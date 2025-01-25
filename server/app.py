@@ -48,7 +48,7 @@ api.add_resource(ConventionAreas, '/convention_areas')
 
 class ConventionAreasById(Resource):
     def get(self, id):
-        area = db.session.get([ConventionArea, id])
+        area = db.session.get(ConventionArea, id)
         if area:
             return area.to_dict(), 200
         return {'error': 'ConventionArea not found'}, 404
@@ -59,7 +59,7 @@ class ConventionAreasById(Resource):
             try:
                 data=request.get_json()
                 for attr, value in data.items():
-                    setattr(arrea, attr, value)
+                    setattr(area, attr, value)
                 db.session.add(area)
                 db.session.commit()
                 return make_response(area.to_dict(), 202)
@@ -78,6 +78,17 @@ class ConventionAreasById(Resource):
 
 api.add_resource(ConventionAreasById, '/convention_areas/<int:id>')
 
+class Hosts(Resource):
+    def get(self):
+        convention_id = request.args.get('convention_id', type=int)
+        if convention_id:
+            conventions = Convention.query.filter_by(id=convention_id).all()
+            hosts = [convention.host_company for convention in conventions if convention.host_company is not None]
+        else:
+            hosts = HostCompany.query.all()
+        return [host.to_dict(only=('id', 'name', 'industry')) for host in hosts]
+
+        
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
