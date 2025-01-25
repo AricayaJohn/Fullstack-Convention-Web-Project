@@ -10,5 +10,9 @@ function HomePage() {
             .catch((err) => console.error('Error fetching data:', err));
     }, []);
 
-    
+    return (
+        <div>
+            <h1> Convention Areas</h1>
+        </div>
+    )
 }
