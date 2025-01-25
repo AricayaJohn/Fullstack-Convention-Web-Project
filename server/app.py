@@ -30,6 +30,21 @@ class ConventionAreas(Resource):
         areas = ConventionArea.query.all()
         return [area.to_dict(only=('id', 'location_name', 'venue')) for area in areas]
     
+    def post(self):
+        data = request.get_json()
+        try:
+            new_area = ConventionArea(
+                location_name = data['location_name'],
+                venue = data['venue']
+            )
+            db.session.add(new_area)
+            db.session.commit()
+            return make_response(new_area.to_dict(), 200)
+        except ValueError as e:
+            return make_response({'errors': ['validation errors']}, 400)
+
+api.add_resource(ConventionAreas, '/convention_areas')
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
