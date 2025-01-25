@@ -109,6 +109,15 @@ class Hosts(Resource):
 
 api.add_resource(Hosts, '/hosts')
 
+class HostCompaniesById(Resource):
+    def get(self, id):
+        host = db.session.get(HostCompany, id)
+        if host:
+            return host.to_dict(), 200
+        return {'error': 'HostCompany not found'}, 404
+
+        
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
