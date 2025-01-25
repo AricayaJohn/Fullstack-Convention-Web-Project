@@ -41,10 +41,18 @@ class ConventionAreas(Resource):
             db.session.commit()
             return make_response(new_area.to_dict(), 200)
         except ValueError as e:
+            print('Error', e)
             return make_response({'errors': ['validation errors']}, 400)
 
 api.add_resource(ConventionAreas, '/convention_areas')
 
+class ConventionAreasById(Resource):
+    def get(self, id):
+        area = db.session.get([ConventionArea, id])
+        if area:
+            return area.to_dict(), 200
+        return {'error': 'ConventionArea not found'}, 404
+        
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
