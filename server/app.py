@@ -145,10 +145,10 @@ class Conventions(Resource):
     def get(self):
         convention_area_id = request.args.get('convention_area_id', type=int)
         if convention_area_id:
-            conventions = Convention.query.filter_by(covention_area_id=convention_area_id).all()
+            conventions = Convention.query.filter_by(convention_area_id=convention_area_id).all()
         else:
             conventions = Convention.query.all()
-        return [convention.to_dict(only('id', 'convention_name', 'days', 'convention_area_id', 'host_company)id')) for convention in conventions]
+        return [convention.to_dict(only=('id', 'convention_name', 'days', 'convention_area_id', 'host_company_id')) for convention in conventions]
 
     def post(self):
         data = request.get_json()
@@ -157,7 +157,7 @@ class Conventions(Resource):
                 convention_name=data['convention_name'],
                 days=data['days'],
                 convention_area_id=data['convention_area_id'],
-                host_company_id=data.get['host_company_id']
+                host_company_id=data.get('host_company_id')
             )
             db.session.add(new_convention)
             db.session.commit()
@@ -188,7 +188,7 @@ class ConventionsById(Resource):
             except ValueError:
                 return make_response({'errors': ['validation errors']}, 400)
         else:
-            return make_response(jsonify({'error': 'Convetion not found'}), 404)
+            return make_response(jsonify({'error': 'Convention not found'}), 404)
 
     def delete(self, id):
         convention = db.session.get(Convention, id)
