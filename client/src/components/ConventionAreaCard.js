@@ -67,5 +67,7 @@ function ConventionAreaCard({ area, onUpdate, onDelete}) {
                 </div>
             )}
         </div>
-    )
+    );
 }
+
+export default ConventionAreaCard;

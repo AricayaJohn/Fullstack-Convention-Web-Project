@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import ConventionAreaCard from "./ConventionAreaCard";
 
 function HomePage() {
     const [conventionAreas, setConventionAreas] = useState([])
@@ -10,9 +11,31 @@ function HomePage() {
             .catch((err) => console.error('Error fetching data:', err));
     }, []);
 
+    const updateConventionAreas = (newArea) => {
+        setConventionAreas((prevAreas) => [...prevAreas, newArea]);
+    };
+
+    const handleDeleteArea = (id) => {
+        setConventionAreas((prevAreas) => prevAreas.filter(area => area.id !== id));
+    };
+
+    const handleUpdateArea = (updateArea) => {
+        setConventionAreas((prevAreas) => prevAreas.map( area => area.id === updateArea.id ? updateArea : area));
+    };
+
+
     return (
         <div>
             <h1> Convention Areas</h1>
+            {conventionAreas.length > 0 ? (
+                conventionAreas.map((area) => (
+                    <ConventionAreaCard
+                        key={area.id}
+                        area={area}
+                ))
+            )}
         </div>
     )
 }
+
+export default HomePage;
