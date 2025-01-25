@@ -22,8 +22,14 @@ def add_host_companies():
 
     db.session.add_all([company1, company2])
     db.session.commit()
-    
 
+def add_conventions():
+    convention1 = Convention(convention_name='Tech Conference 2025', days=3, convention_area_id=2, host_company_id=1)
+    convention2 = Convention(convention_name='Food Convention Festival', days=5, convention_area_id=1, host_company_id=2)
+    convention3 = Convention(convention_name='Movie Award Convention', days=1, convention_area_id=1, host_company_id=2)
+
+    db.session.add_all([convention1, convention2, convention3])
+    db.session.commit()
 
 if __name__ == '__main__':
     fake = Faker()
