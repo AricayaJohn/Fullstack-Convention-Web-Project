@@ -68,6 +68,16 @@ class ConventionAreasById(Resource):
         else:
             return make_response(jsonify({'error': 'ConventionArea not found'}), 404)
 
+    def delete(self, id):
+        area = db.session.get(ConventionArea, id)
+        if area:
+            db.session.delete(area)
+            db.session.commit()
+            return '', 204
+        return {'error': 'ConventionArea not found'}, 404
+
+api.add_resource(ConventionAreasById, '/convention_areas/<int:id>')
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
