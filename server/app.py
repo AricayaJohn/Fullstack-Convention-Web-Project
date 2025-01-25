@@ -88,7 +88,26 @@ class Hosts(Resource):
             hosts = HostCompany.query.all()
         return [host.to_dict(only=('id', 'name', 'industry')) for host in hosts]
 
-        
+    def post(self):
+        data = request.get_json()
+        try:
+            new_host = HostCompany(
+                name=data['name'],
+                industry=data['industry']
+            )
+            db.session.add("new_host")
+            db.session.commit()
+
+            convention = convention.query.get(data['convention_id'])
+            if convention:
+                convention.host_company_id = new_host.id
+                db.session.commit()
+
+            return make_response(new_host.to_dict(), 201)
+        except ValueError:
+            return make_response({'errors': ['validation errors']}, 400)
+
+api.add_resource(Hosts, '/hosts')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
