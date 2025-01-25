@@ -168,6 +168,14 @@ class Conventions(Resource):
 
 api.add_resource(Conventions, '/conventions')
 
+class ConventionsById(Resource):
+    def get(self,id):
+        convention = db.session.get(Convention, id)
+        if convention:
+            return convention.to_dict(), 200
+        return {'error': 'Convention not found'}, 404
+        
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
