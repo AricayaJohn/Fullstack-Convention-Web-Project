@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import HomePage from "./HomePage";
 import ConventionAreaForm from "./ConventionAreaForm";
+import ConventionsPage from "./ConventionsPage";
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/add-convention-area" component={ConventionAreaForm} />
+          <Route path="/conventions/:areaId" component={ConventionsPage} />
         </Switch>
       </main>
     </Router>

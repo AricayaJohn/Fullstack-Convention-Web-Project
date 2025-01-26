@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import ConventionCard from "./ConventionCard";
 
 function ConventionsPage() {
     const [conventions, setConventions] = useState([]);
@@ -19,7 +20,7 @@ function ConventionsPage() {
             setError('Failed to load area details');
         });
 
-        fetch(`/convention?convention_area_id=${areaId}`)
+        fetch(`/conventions?convention_area_id=${areaId}`)
         .then((response) => {
             if (response.ok) {
                 return response.json();
@@ -47,7 +48,7 @@ function ConventionsPage() {
     };
 
     const handleUpdateConvention = (updatedConvention) => {
-        setConventions((prevConventions) => prevConventions.map(convention => convention.id === updatedConvention.id ? updatedConvetnion : convention));
+        setConventions((prevConventions) => prevConventions.map(convention => convention.id === updatedConvention.id ? updatedConvention : convention));
     };
 
     if (status === "pending") return <h2>Loading...</h2>
@@ -68,6 +69,7 @@ function ConventionsPage() {
             ) : (
                 <p>No Conventions found for this area.</p>
             )}
+            <Link to="/">Back to Home </Link>
         </div>
     );
 }
