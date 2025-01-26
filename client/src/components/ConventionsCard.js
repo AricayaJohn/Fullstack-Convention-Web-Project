@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 function ConventionCard({convention, onUpdate, onDelete}) {
     const [conventionName, setConventionName] = useState(convention.convention_name);
     const [days, setDays] = useState(convention.days);
-    cosnt [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     const handleDelete = () => {
         fetch(`/conventions/${convention.id}`, {
@@ -21,7 +21,7 @@ function ConventionCard({convention, onUpdate, onDelete}) {
     };
     const handleUpdate = () => {
         const updatedData = { convention_name: conventionName, days: parseInt(days)};
-        const fetch(`/conventions/${convention.id}`, {
+        fetch(`/conventions/${convention.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,7 +38,34 @@ function ConventionCard({convention, onUpdate, onDelete}) {
 
     return (
         <div>
-            
+            {isEditing ? (
+                <div>
+                    <input 
+                        type="text"
+                        value={conventionName}
+                        onChange={(e)=>setConventionName(e.target.value)}
+                    />
+                    <input 
+                        type="number"
+                        value={days}
+                        onChange={(e) => setDays(e.target.value)}
+                    />
+                    <button onClick={handleUpdate}>Save</button>
+                    <button onClick={() => setIsEditing(false)}>Cancel</button>
+                </div>
+            ) : (
+                <div>
+                    <h2>{convention.convention_name}</h2>
+                    <p>Days: {convention.days}</p>
+                    <Link to={`/hosts/${convention.id}`}>
+                        View Hosts
+                    </Link>
+                    <br />
+                    <button onClick={() => setIsEditing(true)}>Edit Convention</button>
+                    <button onClick={handleDelete}>Delete Convention</button>
+                </div>
+            )}
         </div>
-    )
+    );
 }
+export default ConventionCard;
