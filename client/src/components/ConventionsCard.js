@@ -19,4 +19,26 @@ function ConventionCard({convention, onUpdate, onDelete}) {
         })
         .catch(error => console.error('Error:', error));
     };
+    const handleUpdate = () => {
+        const updatedData = { convention_name: conventionName, days: parseInt(days)};
+        const fetch(`/conventions/${convention.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        })
+        .then(response => response.json())
+        .then(updatedConvention => {
+            onUpdate(updatedConvention);
+            setIsEditing(false);
+        }) 
+        .catch(error => console.error('Error', error));
+    };
+
+    return (
+        <div>
+            
+        </div>
+    )
 }
