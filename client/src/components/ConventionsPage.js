@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 function ConventionPage() {
     const [conventions, setConventions] = useState([]);
     const [areaName, setAreaName] = useState("");
     const [error, setError] = useState(null);
     const [status, setStatus] = useState("pending");
-    const {areaId} = useParams();
+    const { areaId } = useParams();
 
     useEffect(() => {
         fetch(`/convention_areas/${areaId}`)
@@ -36,5 +36,22 @@ function ConventionPage() {
             setError(err.message);
             setStatus("rejected");
         });
-    }, [areaId])
+    }, [areaId]);
+
+    const handleAddConvention = (newConvention) => {
+        setConventions((prevConventions) => [...prevConventions, newConvention]);
+    };
+
+    const handleDeleteConvention = (id) => {
+        setConventions((prevConventions) => prevConventions.filter(convention => convention.id !== id));
+    };
+
+    const handleupdateConvention = (updatedConvention) => {
+        setConventions((prevConventions) => prevConventions.map(convention => convention.id === updatedConvention.id ? updatedConvetnion : convention));
+    };
+
+    if (status === "pending") return <h2>Loading...</h2>
+    if (status === "rejected") return <h2> Error: {error}</h2>
+
+
 }
