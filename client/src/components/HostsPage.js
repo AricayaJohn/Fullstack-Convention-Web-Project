@@ -37,4 +37,24 @@ function HostsPage(){
             });
     }, [conventionId]);
 
+    const handleAddHost = (newHost) => {
+        setHosts((prevState) => [...prevState, newHost]);
+    };
+
+    const handleDeleteHost = (id) => {
+        fetch(`/hosts/${id}`, {
+            method: 'DELETE',
+        })
+        .then((response) => {
+            if (response.ok) {
+                setHosts((prevState) => prevState.filter(host => host.id !== id));
+            } else {
+                throw new Error("Failed to delete Host");
+            }
+        })
+        .catch((error) => console.error('Error', error));
+    };
+
+    if (status === "pending") return <h2>Loading...</h2>
+    if (status === "rejected")return <h2>Error: {error} </h2>
 }
