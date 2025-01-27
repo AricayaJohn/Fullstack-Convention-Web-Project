@@ -53,7 +53,7 @@ function AddConventionForm({ areaId, onAddConvention }) {
                 Host Company ID:
                 <input 
                     type="number"
-                    value={hostComanyId}
+                    value={hostCompanyId}
                     onChange={(e) => setHostCompanyId(e.target.value)}
                 />
             </label>
@@ -62,3 +62,5 @@ function AddConventionForm({ areaId, onAddConvention }) {
         </form>
     )
 }
+
+export default AddConventionForm;

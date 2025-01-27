@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import ConventionCard from "./ConventionCard";
+import AddConventionForm from "./ConventionsForm";
 
 function ConventionsPage() {
     const [conventions, setConventions] = useState([]);
@@ -39,9 +40,9 @@ function ConventionsPage() {
         });
     }, [areaId]);
 
-    // const handleAddConvention = (newConvention) => {
-    //     setConventions((prevConventions) => [...prevConventions, newConvention]);
-    // };
+    const handleAddConvention = (newConvention) => {
+        setConventions((prevConventions) => [...prevConventions, newConvention]);
+    };
 
     const handleDeleteConvention = (id) => {
         setConventions((prevConventions) => prevConventions.filter(convention => convention.id !== id));
@@ -69,6 +70,7 @@ function ConventionsPage() {
             ) : (
                 <p>No Conventions found for this area.</p>
             )}
+            <AddConventionForm areaId={areaId} onAddConvention={handleAddConvention} />
             <Link to="/">Back to Home </Link>
         </div>
     );
