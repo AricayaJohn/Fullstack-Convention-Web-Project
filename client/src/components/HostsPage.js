@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {useParams, Link } from "react-router-dom";
+import AddHostForm from "./AddHostForm";
 
 function HostsPage(){
     const {conventionId} = useParams();
@@ -74,6 +75,10 @@ function HostsPage(){
             ) : (
                 <p> No hosts found for this convention.</p>
             )}
+            <AddHostForm conventionId={conventionId} onAddHost={handleAddHost} />
+            <Link to="/">Back to Home</Link>
         </div>
     )
 }
+
+export default HostsPage;
