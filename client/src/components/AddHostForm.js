@@ -25,4 +25,31 @@ function AddHostForm({ conventionId, onAddHost }) {
         })
         .catch(error => console.error('Error:', error));
     };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <h2>Add New Host</h2>
+            <label>
+                Name:
+                <input 
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+            </label>
+            <br />
+            <label>
+                Industry:
+                <input 
+                    type="text"
+                    value={industry}
+                    onChange={(e) => setIndustry(e.target.value)}
+                />
+            </label>
+            <br />
+            <button type="submit"> Add Host</button>
+        </form>
+    );
 }
+
+export default AddHostForm;
