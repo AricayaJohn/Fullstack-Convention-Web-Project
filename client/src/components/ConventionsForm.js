@@ -7,7 +7,7 @@ function AddConventionForm({ areaId, onAddConvention }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('conventions', {
+        fetch('/conventions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

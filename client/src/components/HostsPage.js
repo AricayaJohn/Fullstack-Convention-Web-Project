@@ -64,7 +64,7 @@ function HostsPage(){
             <h1> Hosts for {conventionName} </h1>
             {hosts.length> 0 ? (
                 <ul>
-                    {host.map((host) => (
+                    {hosts.map((host) => (
                         <li key={host.id}>
                             <h3>{host.name}</h3>
                             <p>Industry: {host.industry}</p>
