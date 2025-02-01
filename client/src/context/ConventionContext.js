@@ -38,16 +38,64 @@ export function ConventionProvider({ children }) {
             if (!response.ok) throw new Error("Failed to update convention area");
             const updatedArea = await response.json();
 
-            setConventionAreas((prevAreas) => 
-                prevAreas.map((area) => 
-                    area.id === id ? updatedArea : area
-            )
-        );
-        return updatedArea;
+            setConventionAreas((prevAreas) =>
+                prevAreas.map((area) => (area.id === id ? updatedArea : area))
+              );
+            return updatedArea;
         } catch (error) {
             setError("Error updating convention area: " + error.message);
             throw error;
         }
     }, []);
 
+    const deleteConventionArea = useCallback(async(id) => {
+        try {
+            const response = await fetch(`/convention_areas/${id}`, {
+                method: "DELETE",
+            });
+            if (!response.ok) throw new Error("Failed to delete convention area");
+
+            setConventionAreas((prevAreas) => 
+                prevAreas.filter((area) => area.id !== id)
+            );
+        } catch (error) {
+            setError("Error deleting convention area: " + error.message);
+            throw error;
+        }
+    }, []);
+
+    const addConventionArea = useCallback(async (newArea) => {
+        try{
+            const response = await fetch('/convention_areas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newArea),
+            });
+            if (!response.ok) throw new Error("Failed to add convention area");
+            const savedArea = await response.json();
+            setConventionAreas((prevAreas) => [...prevAreas, savedArea]);
+
+            return savedArea;
+        } catch (error) {
+            setError("Error adding convention area: " + error.message);
+            throw error
+        }
+    }, [])
+
+    const fetchConventionById = useCallback( async (id) => {
+        try {
+            const response = await fetch(`/conventions/${id}`);
+            if (!response.ok) throw new Error("Failed to fetch convention");
+            const data = await response.json();
+            setConventions((prev) => 
+                prev.map((convention) => (convention.id === id ? data : convention))
+        );
+        return data;
+        } catch (error) {
+            setError("Error fetching convention by ID: " + error.message);
+            throw error;
+        }
+    }, [])
 }
