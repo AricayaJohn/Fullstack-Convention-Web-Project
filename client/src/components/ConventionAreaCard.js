@@ -1,40 +1,30 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import {Link} from "react-router-dom";
+import { ConventionContext } from "../context/ConventionContext";
 
-function ConventionAreaCard({ area, onUpdate, onDelete}) {
+function ConventionAreaCard({ area }) {
     const [locationName, setLocationName] = useState(area.location_name);
     const [venue, setVenue] = useState(area.venue);
     const [isEditing, setIsEditing] = useState(false);
 
-    const handleDelete = () => {
-        fetch(`/convention_areas/${area.id}`, {
-            method: 'DELETE',
-        })
-        .then(response => {
-            if (response.ok) {
-                onDelete(area.id);
-            } else {
-                throw new Error("Failed to delete convention area");
-            }
-        })
-        .catch(error => console.error('Error:', error));
+    const {updateConventionArea, deleteConventionArea} = useContext(ConventionContext)
+
+    const handleDelete = async () => {
+        try {
+            await deleteConventionArea(area.id);
+        } catch (error) {
+            console.error('Error', error);
+        }
     };
 
-    const handleUpdate = () => {
+    const handleUpdate = async () => {
         const updatedData = { location_name: locationName, venue: venue};
-        fetch(`/convention_areas/${area.id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedData),
-        })
-        .then(response => response.json())
-        .then(updatedArea => {
-            onUpdate(updatedArea);
+        try {
+            await updateConventionArea(area.id, updateData);
             setIsEditing(false);
-        })
-        .catch(error => console.error('Error', error));
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
