@@ -112,14 +112,14 @@ export function ConventionProvider({ children }) {
         }
     }, [])
 
-    const AddHost = useCallback(async (newHost, conventionId) => {
+    const addHost = useCallback(async (newHost, conventionId) => {
         try {
             const response = await fetch('/hosts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newhost),
+                body: JSON.stringify(newHost),
             });
             if (!response.ok) throw new Error("Failed to add host");
             const savedHost = await response.json();
@@ -135,4 +135,107 @@ export function ConventionProvider({ children }) {
             throw error;
         }
     }, [])
+
+    const deleteHost = useCallback(async (id) => {
+        try {
+            const response = await fetch(`/hosts/${id}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) throw new Error("Failed to delete host");
+
+            setHosts((prevHosts) => prevHosts.filter((host) => host.id !== id));
+
+            setSelectedConventionHosts((prevSelectedHosts) => 
+                prevSelectedHosts.filter((host) => host.id !== id)
+            );
+        } catch (error) {
+            setError("Error deleting host: " + error.message);
+            throw error;
+        }
+    }, [])
+
+    const addConvention = useCallback(async (newConvention) => {
+        try {
+            const response = await fetch('/conventions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newConvention),
+            });
+            if (!response.ok) throw new Error("Failed to add convention");
+            const savedConvention = await response.json();
+
+            setConventions((prevConventions) => [...prevConventions, savedConvention]);
+
+            return savedConvention;
+        } catch (error) {
+            setError("Error adding convention: " + error.message);
+            throw error;
+        }
+    }, [])
+
+    const deleteConvention = useCallback(async (id) => {
+        try {
+            const response = await fetch (`/conventions/${id}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) throw new Error("Failed to delete convention");
+
+            setConventions((prevConventions) => 
+                prevConventions.filter((convention) => convention.id !== id)
+            );
+        } catch (error) {
+            setError("Error deleting convention:" + error.message);
+            throw error;
+        }
+    }, []);
+
+    const updatedConvention = useCallback(async (id, updatedData) => {
+        try {
+            const response = await fetch(`/conventions/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            });
+            if (!response.ok) throw new Error("Failed to update convention");
+            const updatedConvention = await response.json();
+
+            setConventions((prevConventions) =>
+                prevConventions.map((convention) => 
+                    convention.id === id ? updatedConvention : convention
+                )
+            );
+            return updatedConvention;
+        } catch (error) {
+            setError("Error updating convention: " + error.message);
+            throw error;
+        }
+    }, [])
+
+        return (
+            <ConventionContext.Provider
+                value={{
+                    conventionAreas,
+                    conventions,
+                    hosts,
+                    selectedConventionHosts,
+                    updateConventionArea,
+                    addConventionArea,
+                    deleteConventionArea,
+                    fetchConventionById,
+                    fetchHostsByConventionId,
+                    addHost,
+                    deleteHost,
+                    addConvention,
+                    updatedConvention,
+                    deleteConvention,
+                    error,
+                }}
+            >
+                {children}
+            </ConventionContext.Provider>
+        );
 }
