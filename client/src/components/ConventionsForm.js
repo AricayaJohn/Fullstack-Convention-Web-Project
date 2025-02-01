@@ -1,33 +1,29 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
+import {ConventionContext} from "../context/ConventionContext";
 
-function AddConventionForm({ areaId, onAddConvention }) {
+function AddConventionForm({ areaId }) {
     const [conventionName, setConventionName] = useState("");
     const [days, setDays] = useState("");
     const [hostCompanyId, setHostCompanyId] = useState("");
+    
+    const { addConvention } = useContext(ConventionContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('/conventions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                convention_name: conventionName,
-                days: parseInt(days),
-                convention_area_id: parseInt(areaId),
-                host_company_id: parseInt(hostCompanyId)
-            }),
-        })
-        .then(response => response.json())
-        .then(newConvention => {
-            onAddConvention(newConvention);
-            setConventionName("");
-            setDays("");
-            setHostCompanyId("")
-        })
-        .catch(error => console.error('Error', error));
+
+        const newConvention = {
+            convention_name: conventionName,
+            days: parseInt(days),
+            convention_area_id: parseInt(areaId),
+            host_company_id: parseInt(hostCompanyId),
+        };
+
+        addConvention(newConvention);
+        setConventionName("")
+        setDays("");
+        setHostCompanyId("");
     };
+
     return (
         <form onSubmit={handleSubmit}>
             <h2>Add New Convention</h2>
