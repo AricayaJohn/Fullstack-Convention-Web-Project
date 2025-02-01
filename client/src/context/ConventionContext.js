@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffectm useCallback } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 
 export const ConventionContext = createContext();
 
@@ -11,7 +11,7 @@ export function ConventionProvider({ children }) {
 
     useEffect(() => {
         fetch("/convention_areas")
-            .then(response => response.json)
+            .then(response => response.json())
             .then(data => setConventionAreas(data))
             .catch(error => setError("Error fetching convention areas: " + error.message));
         
@@ -19,5 +19,35 @@ export function ConventionProvider({ children }) {
             .then(response => response.json())
             .then(data => setConventions(data))
             .catch(error => setError("Error fetching conventions: " + error.message));
+
+        fetch("/hosts")
+            .then(response => response.json())
+            .then(data => setHosts(data))
+            .catch(error => setError("Error fetching hosts: " + error.message));
     }, [])
+
+    const updateConventionArea = useCallback(async (id, updatedData) => {
+        try {
+            const response = await fetch(`/convention_areas/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            });
+            if (!response.ok) throw new Error("Failed to update convention area");
+            const updatedArea = await response.json();
+
+            setConventionAreas((prevAreas) => 
+                prevAreas.map((area) => 
+                    area.id === id ? updatedArea : area
+            )
+        );
+        return updatedArea;
+        } catch (error) {
+            setError("Error updating convention area: " + error.message);
+            throw error;
+        }
+    }, []);
+
 }
