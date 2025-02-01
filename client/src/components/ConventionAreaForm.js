@@ -1,7 +1,7 @@
 import React, {useState, useContext} from "react";
 import { ConventionContext } from "../context/ConventionContext";
 
-function ConventionAreaForm({ updateConventionAreas }) {
+function ConventionAreaForm() {
     const [locationName, setLocationName] = useState("");
     const [venue, setVenue] = useState("");
 

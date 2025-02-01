@@ -1,39 +1,22 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {Link} from "react-router-dom";
+import { ConventionContext } from "../context/ConventionContext";
 
-function ConventionCard({convention, onUpdate, onDelete}) {
+function ConventionCard({convention}) {
     const [conventionName, setConventionName] = useState(convention.convention_name);
     const [days, setDays] = useState(convention.days);
     const [isEditing, setIsEditing] = useState(false);
 
+    const { updatedConvention, deleteConvention } = useContext(ConventionContext);
+
     const handleDelete = () => {
-        fetch(`/conventions/${convention.id}`, {
-            method: 'DELETE',
-        })
-        .then(response => {
-            if (response.ok) {
-                onDelete(convention.id);
-            } else {
-                throw new Error("Failed to delete convention");
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        deleteConvention(convention.id);
     };
+
     const handleUpdate = () => {
-        const updatedData = { convention_name: conventionName, days: parseInt(days)};
-        fetch(`/conventions/${convention.id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedData),
-        })
-        .then(response => response.json())
-        .then(updatedConvention => {
-            onUpdate(updatedConvention);
-            setIsEditing(false);
-        }) 
-        .catch(error => console.error('Error', error));
+        const updatedData = { convention_name: conventionName, days: parseInt(days) };
+        updatedConvention(convention.id, updatedData);
+        setIsEditing(false);
     };
 
     return (

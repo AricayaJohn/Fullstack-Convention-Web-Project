@@ -1,76 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import { ConventionContext } from "../context/ConventionContext";
 import ConventionCard from "./ConventionCard";
 import AddConventionForm from "./ConventionsForm";
 
 function ConventionsPage() {
-    const [conventions, setConventions] = useState([]);
-    const [areaName, setAreaName] = useState("");
-    const [error, setError] = useState(null);
-    const [status, setStatus] = useState("pending");
     const { areaId } = useParams();
+    const { conventions, addConvention, deleteConvention, updateConvention } = useContext(ConventionContext);
 
-    useEffect(() => {
-        fetch(`/convention_areas/${areaId}`)
-        .then((response) => response.json())
-        .then((data) => {
-            setAreaName(data.location_name);
-        })
-        .catch((err) => {
-            console.error('Error fetching area details:', err);
-            setError('Failed to load area details');
-        });
-
-        fetch(`/conventions?convention_area_id=${areaId}`)
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error("Failed to fetch conventions");
-            }
-        })
-        .then((data) => {
-            setConventions(data);
-            setStatus("resolved");
-        })
-        .catch((err) => {
-            console.error('Error fetching conventions:', err);
-            setError(err.message);
-            setStatus("rejected");
-        });
-    }, [areaId]);
-
-    const handleAddConvention = (newConvention) => {
-        setConventions((prevConventions) => [...prevConventions, newConvention]);
-    };
-
-    const handleDeleteConvention = (id) => {
-        setConventions((prevConventions) => prevConventions.filter(convention => convention.id !== id));
-    };
-
-    const handleUpdateConvention = (updatedConvention) => {
-        setConventions((prevConventions) => prevConventions.map(convention => convention.id === updatedConvention.id ? updatedConvention : convention));
-    };
-
-    if (status === "pending") return <h2>Loading...</h2>
-    if (status === "rejected") return <h2> Error: {error}</h2>
+    const filteredConventions = conventions.filter(
+        (convention) => convention.convention_area_id === parseInt(areaId)
+    );
 
     return (
         <div>
-            <h1> Conventions in {areaName}</h1>
-            {conventions.length > 0 ? (
-                conventions.map((convention) => (
+            <h1> Conventions </h1>
+            {filteredConventions.length > 0 ? (
+                filteredConventions.map((convention) => (
                     <ConventionCard 
                     key={convention.id}
                     convention={convention}
-                    onDelete={handleDeleteConvention}
-                    onUpdate={handleUpdateConvention}
+                    onDelete={deleteConvention}
+                    onUpdate={updateConvention}
                     />
                 ))
             ) : (
                 <p>No Conventions found for this area.</p>
             )}
-            <AddConventionForm areaId={areaId} onAddConvention={handleAddConvention} />
+            <AddConventionForm areaId={parseInt(areaId)} onAddConvention={addConvention} />
             <Link to="/">Back to Home </Link>
         </div>
     );
