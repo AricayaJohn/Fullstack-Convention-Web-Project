@@ -12,5 +12,12 @@ export function ConventionProvider({ children }) {
     useEffect(() => {
         fetch("/convention_areas")
             .then(response => response.json)
-    })
+            .then(data => setConventionAreas(data))
+            .catch(error => setError("Error fetching convention areas: " + error.message));
+        
+        fetch("/conventions")
+            .then(response => response.json())
+            .then(data => setConventions(data))
+            .catch(error => setError("Error fetching conventions: " + error.message));
+    }, [])
 }
