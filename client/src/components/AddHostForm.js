@@ -23,7 +23,7 @@ function AddHostForm({ conventionId, onAddHost }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>If there is no Host add new Host Company</h2>
+            <h2>Add New Host Company If None</h2>
             <label>
                 Name:
                 <input 
