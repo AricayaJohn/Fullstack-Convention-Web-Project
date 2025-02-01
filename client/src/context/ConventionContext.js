@@ -98,4 +98,41 @@ export function ConventionProvider({ children }) {
             throw error;
         }
     }, [])
+
+    const fetchHostsByConventionId = useCallback(async (conventionId) => {
+        try{
+            const response = await fetch (`/hosts?convention_id=${conventionId}`);
+            if(!response.ok) throw new Error("Failed to fetch hosts");
+            const data = await response.json();
+            setSelectedConventionHosts(data);
+            return data;
+        } catch (error) {
+            setError("Error fetching hosts for convention: " + error.message);
+            throw error;
+        }
+    }, [])
+
+    const AddHost = useCallback(async (newHost, conventionId) => {
+        try {
+            const response = await fetch('/hosts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newhost),
+            });
+            if (!response.ok) throw new Error("Failed to add host");
+            const savedHost = await response.json();
+
+            setHosts((prevHosts) => [...prevHosts, savedHost]);
+
+            if(savedHost.convention_id === parseInt(conventionId)) {
+                setSelectedConventionHosts((prevSelectedHosts) => [...prevSelectedHosts, savedHost]);
+            }
+            return savedHost;
+        } catch (error) {
+            setError("Error adding host: " + error.message);
+            throw error;
+        }
+    }, [])
 }
