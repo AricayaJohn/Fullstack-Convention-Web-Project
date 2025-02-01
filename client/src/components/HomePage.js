@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import ConventionAreaCard from "./ConventionAreaCard";
 import ConventionAreaForm from "./ConventionAreaForm";
 import { ConventionContext } from "../context/ConventionContext";
@@ -20,6 +21,7 @@ function HomePage() {
                 <p>No Convention areas found.</p>
             )}
             <ConventionAreaForm />
+            <Link to ="/"> Back to Home </Link>
         </div>
     )
 }

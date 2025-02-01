@@ -20,7 +20,7 @@ function ConventionAreaCard({ area }) {
     const handleUpdate = async () => {
         const updatedData = { location_name: locationName, venue: venue};
         try {
-            await updateConventionArea(area.id, updateData);
+            await updateConventionArea(area.id, updatedData);
             setIsEditing(false);
         } catch (error) {
             console.error('Error:', error);

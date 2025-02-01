@@ -1,32 +1,23 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
+import { ConventionContext } from "../context/ConventionContext";
 
 function ConventionAreaForm({ updateConventionAreas }) {
     const [locationName, setLocationName] = useState("");
     const [venue, setVenue] = useState("");
 
-    const handleSubmit = (e) => {
+    const { addConventionArea } = useContext(ConventionContext);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const newArea = { location_name: locationName, venue: venue};
         
-        fetch("/convention_areas", {
-            method: "POST",
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify(newArea),
-        })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error("Failed to add convention area");
-        })
-        .then((data) => {
-            updateConventionAreas(data);
+        try {
+            await addConventionArea(newArea);
             setLocationName("");
             setVenue("");
-        })
-        .catch((error) => {
+        } catch (error) {
             console.error("Error submitting form:", error);
-        });
+        }
     };
 
     return (
