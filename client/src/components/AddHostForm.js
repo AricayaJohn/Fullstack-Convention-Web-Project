@@ -4,31 +4,26 @@ function AddHostForm({ conventionId, onAddHost }) {
     const [name, setName] = useState("");
     const [industry, setIndustry] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        fetch('/hosts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name,
-                industry,
-                convention_id: parseInt(conventionId)
-            }),
-        })
-        .then(response => response.json())
-        .then(newHost => {
-            onAddHost(newHost);
+        const newHost = {
+            name,
+            industry,
+            convention_id: parseInt(conventionId),
+        };
+        try {
+            await onAddHost(newHost);
             setName("");
             setIndustry("");
-        })
-        .catch(error => console.error('Error:', error));
+        } catch (error) {
+            console.error(error);
+            alert("Failed to add host")
+        }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>Add New Host</h2>
+            <h2>If there is no Host add new Host Company</h2>
             <label>
                 Name:
                 <input 

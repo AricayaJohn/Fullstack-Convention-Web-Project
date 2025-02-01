@@ -1,70 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {useParams, Link } from "react-router-dom";
 import AddHostForm from "./AddHostForm";
+import { ConventionContext } from "../context/ConventionContext";
 
 function HostsPage(){
     const {conventionId} = useParams();
-    const [hosts, setHosts] =useState([]);
-    const [conventionName, setConventionName] = useState("");
+    const {
+        selectedConventionHosts,
+        fetchHostsByConventionId,
+        deleteHost,
+        addHost, } = useContext(ConventionContext);
     const [status, setStatus] = useState("pending");
-    const [error, setError] = useState(null);
+    const [pageError, setPageError] = useState(null);
 
     useEffect(() => {
-        fetch(`/conventions/${conventionId}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setConventionName(data.convention_name);
-            })
-            .catch((err) => {
-                console.error('Error fetching convention details', err);
-                setError('Failed to load convention details');
-            });
-        fetch(`/hosts?convention_id=${conventionId}`)
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error("Failed to fetch hosts");
-                }
-            })
-            .then((data) => {
-                setHosts(data);
-                setStatus("resolved");
-            })
-            .catch((err) => {
-                console.error('Error fetching hosts:', err);
-                setError(err.message);
-                setStatus("rejected");
-            });
-    }, [conventionId]);
+        const loadData = async () => {
+            try {
+                await fetchHostsByConventionId(conventionId);
+                setStatus("resolved")
+            } catch (err) {
+                console.error("Error fetching data: ", err);
+                setPageError("Failed to load data");
+                setStatus("rejected")
+            }
+        };
+        loadData();
+    }, [conventionId, fetchHostsByConventionId]);
 
-    const handleAddHost = (newHost) => {
-        setHosts((prevState) => [...prevState, newHost]);
+
+    const handleAddHost = async (newHost) => {
+        try {
+            await addHost(newHost, conventionId);
+            await fetchHostsByConventionId(conventionId);
+        } catch (error) {
+            console.error("Error adding host: ", error);
+            setPageError("Failed to add host");
+        }
     };
 
-    const handleDeleteHost = (id) => {
-        fetch(`/hosts/${id}`, {
-            method: 'DELETE',
-        })
-        .then((response) => {
-            if (response.ok) {
-                setHosts((prevState) => prevState.filter(host => host.id !== id));
-            } else {
-                throw new Error("Failed to delete Host");
-            }
-        })
-        .catch((error) => console.error('Error', error));
+    const handleDeleteHost = async (id) => {
+        try {
+            await deleteHost(id);
+            await fetchHostsByConventionId(conventionId);
+        } catch (error) {
+            console.error("Error deleting host: ", error);
+            setPageError("Failed to delete host");
+        }
     };
 
     if (status === "pending") return <h2>Loading...</h2>
-    if (status === "rejected")return <h2>Error: {error} </h2>
+    if (status === "rejected")return <h2>Error: {pageError} </h2>
 
     return (
         <div>
-            <h1> Hosts for {conventionName} </h1>
-            {hosts.length> 0 ? (
+            <h1> Hosts </h1>
+            {selectedConventionHosts.length> 0 ? (
                 <ul>
-                    {hosts.map((host) => (
+                    {selectedConventionHosts.map((host) => (
                         <li key={host.id}>
                             <h3>{host.name}</h3>
                             <p>Industry: {host.industry}</p>
