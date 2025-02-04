@@ -80,14 +80,9 @@ api.add_resource(ConventionAreasById, '/convention_areas/<int:id>')
 
 class Hosts(Resource):
     def get(self):
-        convention_id = request.args.get('convention_id', type=int)
-        if convention_id:
-            conventions = Convention.query.filter_by(id=convention_id).all()
-            hosts = [convention.host_company for convention in conventions if convention.host_company is not None]
-        else:
-            hosts = HostCompany.query.all()
+        hosts = HostCompany.query.all()
         return [host.to_dict(only=('id', 'name', 'industry')) for host in hosts]
-
+   
     def post(self):
         data = request.get_json()
         try:
