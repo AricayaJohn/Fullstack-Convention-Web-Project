@@ -26,27 +26,26 @@ export function ConventionProvider({ children }) {
             .catch(error => setError("Error fetching hosts: " + error.message));
     }, [])
 
-    const updateConventionArea = useCallback(async (id, updatedData) => {
-        try {
-            const response = await fetch(`/convention_areas/${id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedData),
-            });
-            if (!response.ok) throw new Error("Failed to update convention area");
-            const updatedArea = await response.json();
-
-            setConventionAreas((prevAreas) =>
-                prevAreas.map((area) => (area.id === id ? updatedArea : area))
-              );
-            return updatedArea;
-        } catch (error) {
-            setError("Error updating convention area: " + error.message);
-            throw error;
-        }
-    }, []);
+    const updateConventionArea = useCallback((id, updatedData) => {
+        fetch(`/convention_areas/${id}`, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData),
+        })
+        .then((response) => response.ok ? response.json() : null)
+        .then((updatedArea) => {
+            if (updatedArea) {
+                setConventionAreas((prevAreas) => 
+                    prevAreas.map((area) => (area.id === id ? updatedArea : area))
+                );
+            } else {
+                setError("Failed to update convention area");
+            }
+        })
+        .catch(() => {
+            setError("Error updating convention area");
+        });
+    }, [])
 
     const deleteConventionArea = useCallback(async(id) => {
         try {
