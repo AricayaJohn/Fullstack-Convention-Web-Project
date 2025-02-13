@@ -82,35 +82,29 @@ export function ConventionProvider({ children }) {
         });
     }, []);
 
-    const fetchConventionById = useCallback((id) => {
-        fetch(`/conventions/${id}`)
-            .then((response) => response.ok ? response.json() : null)
-            .then((data) => {
-                if (data) {
-                    setConventions((prev) => 
-                        prev.map((convention) => (convention.id === id ? data : convention))
-                    );
-                } else {
-                    setError("Failed to fetch convention");
-                }
-            })
-            .catch(() => {
-                setError("Error fetching convention by ID");
-            });
-    }, []);
+    // const fetchConventionById = useCallback((id) => {
+    //     fetch(`/conventions/${id}`)
+    //         .then((response) => response.ok ? response.json() : null)
+    //         .then((data) => {
+    //             if (data) {
+    //                 setConventions((prev) => 
+    //                     prev.map((convention) => (convention.id === id ? data : convention))
+    //                 );
+    //             } else {
+    //                 setError("Failed to fetch convention");
+    //             }
+    //         })
+    //         .catch(() => {
+    //             setError("Error fetching convention by ID");
+    //         });
+    // }, []);
 
-    const fetchHostsByConventionId = useCallback(async (conventionId) => {
-        try{
-            const response = await fetch (`/hosts?convention_id=${conventionId}`);
-            if(!response.ok) throw new Error("Failed to fetch hosts");
-            const data = await response.json();
-            setSelectedConventionHosts(data);
-            return data;
-        } catch (error) {
-            setError("Error fetching hosts for convention: " + error.message);
-            throw error;
-        }
-    }, [])
+    const HostsByConventionId = useCallback((conventionId) => {
+        fetch(`/hosts?convention_id=${conventionId}`)
+            .then((response) => response.json())
+            .then((data) => setSelectedConventionHosts(data))
+            .catch(() => setError("Error fetching hosts for convention"));
+    }, []);
 
     const addHost = useCallback(async (newHost, conventionId) => {
         try {
@@ -226,7 +220,7 @@ export function ConventionProvider({ children }) {
                     addConventionArea,
                     deleteConventionArea,
                     // fetchConventionById,
-                    fetchHostsByConventionId,
+                    HostsByConventionId,
                     addHost,
                     deleteHost,
                     addConvention,
