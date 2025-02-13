@@ -168,20 +168,18 @@ export function ConventionProvider({ children }) {
         .catch(() => setError("Error adding convention"));
     }, [])
 
-    const deleteConvention = useCallback(async (id) => {
-        try {
-            const response = await fetch (`/conventions/${id}`, {
-                method: 'DELETE',
-            });
-            if (!response.ok) throw new Error("Failed to delete convention");
-
-            setConventions((prevConventions) => 
-                prevConventions.filter((convention) => convention.id !== id)
-            );
-        } catch (error) {
-            setError("Error deleting convention:" + error.message);
-            throw error;
-        }
+    const deleteConvention = useCallback((id) => {
+        fetch(`/conventions/${id}`, { method: 'DELETE' })
+            .then((response) => {
+                if (response.ok) {
+                    setConventions((prevConventions) => 
+                        prevConventions.filter((convention) => convention.id !== id)
+                    );
+                } else {
+                    setError("Failed to delete convention");
+                }
+            })
+            .catch(() => setError("Error deleting convention"));
     }, []);
 
     const updatedConvention = useCallback(async (id, updatedData) => {
