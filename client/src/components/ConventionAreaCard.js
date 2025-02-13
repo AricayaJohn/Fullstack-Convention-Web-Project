@@ -18,7 +18,7 @@ function ConventionAreaCard({ area }) {
         updateConventionArea(area.id, updatedData);
         setIsEditing(false)
     };
-    
+
     return (
         <div>
             {isEditing ? (
@@ -42,6 +42,10 @@ function ConventionAreaCard({ area }) {
                     <p>{area.venue}</p>
                     <Link to={`/conventions/${area.id}`}>
                         View Conventions in {area.location_name}
+                    </Link>
+                    <br /> 
+                    <Link to={`/hosts_in_area/${area.id}`}>
+                        View Host in {area.location_name}
                     </Link>
                     <br/>
                     <button onClick={() => setIsEditing(true)}> Edit Area</button>
