@@ -63,25 +63,24 @@ export function ConventionProvider({ children }) {
         });
     }, []);
 
-    const addConventionArea = useCallback(async (newArea) => {
-        try{
-            const response = await fetch('/convention_areas', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newArea),
-            });
-            if (!response.ok) throw new Error("Failed to add convention area");
-            const savedArea = await response.json();
-            setConventionAreas((prevAreas) => [...prevAreas, savedArea]);
-
-            return savedArea;
-        } catch (error) {
-            setError("Error adding convention area: " + error.message);
-            throw error
-        }
-    }, [])
+    const addConventionArea = useCallback((newArea) => {
+        fetch(`/convention_areas`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newArea),
+        })
+        .then((response) => response.ok ? response.json() : null)
+        .then((savedArea) => {
+            if (savedArea) {
+                setConventionAreas((prevAreas) => [...prevAreas, savedArea]);
+            } else {
+                setError("Failed to add convention area")
+            }
+        })
+        .catch(() => {
+            setError("Failed to add convention area");
+        });
+    }, []);
 
     // const fetchConventionById = useCallback( async (id) => {
     //     try {
