@@ -9,24 +9,16 @@ function ConventionAreaCard({ area }) {
 
     const {updateConventionArea, deleteConventionArea} = useContext(ConventionContext)
 
-    const handleDelete = async () => {
-        try {
-            await deleteConventionArea(area.id);
-        } catch (error) {
-            console.error('Error', error);
-        }
+    const handleDelete = () => {
+        deleteConventionArea(area.id);
     };
 
-    const handleUpdate = async () => {
+    const handleUpdate = () => {
         const updatedData = { location_name: locationName, venue: venue};
-        try {
-            await updateConventionArea(area.id, updatedData);
-            setIsEditing(false);
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        updateConventionArea(area.id, updatedData);
+        setIsEditing(false)
     };
-
+    
     return (
         <div>
             {isEditing ? (
