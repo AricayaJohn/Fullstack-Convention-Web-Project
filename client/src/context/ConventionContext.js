@@ -106,28 +106,28 @@ export function ConventionProvider({ children }) {
             .catch(() => setError("Error fetching hosts for convention"));
     }, []);
 
-    const addHost = useCallback(async (newHost, conventionId) => {
-        try {
-            const response = await fetch('/hosts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newHost),
-            });
-            if (!response.ok) throw new Error("Failed to add host");
-            const savedHost = await response.json();
-
-            setHosts((prevHosts) => [...prevHosts, savedHost]);
-
-            if(savedHost.convention_id === parseInt(conventionId)) {
-                setSelectedConventionHosts((prevSelectedHosts) => [...prevSelectedHosts, savedHost]);
+    const addHost = useCallback((newHost, conventionId) => {
+        fetch('/hosts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newHost),
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                setError("Error adding host");
             }
-            return savedHost;
-        } catch (error) {
-            setError("Error adding host: " + error.message);
-            throw error;
-        }
+        })
+        .then((savedHost) => {
+            if (savedHost) {
+                setHosts((prevHosts) => [...prevHosts, savedHost]);
+                if (savedHost.convention_id === parseInt(conventionId)) {
+                    setSelectedConventionHosts((prevSelectedHosts) => [...prevSelectedHosts, savedHost]);
+                }
+            }
+        })
+        .catch(() => setError("Error adding host"));
     }, [])
 
     const deleteHost = useCallback(async (id) => {
