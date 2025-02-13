@@ -47,20 +47,20 @@ export function ConventionProvider({ children }) {
         });
     }, [])
 
-    const deleteConventionArea = useCallback(async(id) => {
-        try {
-            const response = await fetch(`/convention_areas/${id}`, {
-                method: "DELETE",
-            });
-            if (!response.ok) throw new Error("Failed to delete convention area");
-
-            setConventionAreas((prevAreas) => 
-                prevAreas.filter((area) => area.id !== id)
+    const deleteConventionArea = useCallback((id) => {
+        fetch(`/convention_areas/${id}`, { method: "DELETE" })
+        .then((response) => {
+            if (response.ok) {
+                setConventionAreas((prevAreas) => 
+                    prevAreas.filter((area) => area.id !== id)
             );
-        } catch (error) {
-            setError("Error deleting convention area: " + error.message);
-            throw error;
-        }
+            } else {
+                setError("Failed to delete convention area");
+            }
+        })
+        .catch(() => {
+            setError("Error deleting convention area");
+        });
     }, []);
 
     const addConventionArea = useCallback(async (newArea) => {
