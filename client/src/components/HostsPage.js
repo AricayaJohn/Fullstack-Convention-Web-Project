@@ -7,57 +7,23 @@ function HostsPage() {
     const { conventionId } = useParams();
     const {
         selectedConventionHosts,
-        fetchHostsByConventionId,
-        fetchConventionById,
+        HostsByConventionId,
         deleteHost,
-        addHost,
-    } = useContext(ConventionContext);
-    const [conventionName, setConventionName] = useState("");
-    const [status, setStatus] = useState("pending");
-    const [pageError, setPageError] = useState(null);
+        addHost } = useContext(ConventionContext);
 
     useEffect(() => {
-        const loadData = async () => {
-            try {
-                // Fetch convention details
-                const conventionData = await fetchConventionById(conventionId);
-                setConventionName(conventionData.convention_name);
+        HostsByConventionId(conventionId);
+    }, [conventionId, HostsByConventionId]);
 
-                // Fetch hosts for the convention
-                await fetchHostsByConventionId(conventionId);
-                setStatus("resolved");
-            } catch (err) {
-                console.error("Error fetching data:", err);
-                setPageError("Failed to load data");
-                setStatus("rejected");
-            }
-        };
-
-        loadData();
-    }, [conventionId, fetchConventionById, fetchHostsByConventionId]);
-
-    const handleAddHost = async (newHost) => {
-        try {
-            await addHost(newHost, conventionId);
-            await fetchHostsByConventionId(conventionId); // Refresh the list after adding a host
-        } catch (error) {
-            console.error("Error adding host:", error);
-            setPageError("Failed to add host");
-        }
+    const handleAddHost = (newHost) => {
+        addHost(newHost, conventionId);
+        HostsByConventionId(conventionId);
     };
 
-    const handleDeleteHost = async (id) => {
-        try {
-            await deleteHost(id);
-            await fetchHostsByConventionId(conventionId); // Refresh the list after deleting a host
-        } catch (error) {
-            console.error("Error deleting host:", error);
-            setPageError("Failed to delete host");
-        }
+    const handleDeleteHost = (id) => {
+        deleteHost(id);
+        HostsByConventionId(conventionId);
     };
-
-    if (status === "pending") return <h2>Loading...</h2>;
-    if (status === "rejected") return <h2>Error: {pageError}</h2>;
 
     return (
         <div>

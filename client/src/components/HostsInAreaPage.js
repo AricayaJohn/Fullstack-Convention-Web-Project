@@ -7,10 +7,10 @@ function HostsInAreaPage() {
     const { HostsByAreaId } = useContext(ConventionContext);
     const [ hosts, setHosts ] = useState([])
 
-    useEffect(() => {|
+    useEffect(() => {
         HostsByAreaId(areaId).then(setHosts);
     }, [areaId, HostsByAreaId]);
-    
+
     return (
         <div>
             <h1>Hosts in Area</h1>
