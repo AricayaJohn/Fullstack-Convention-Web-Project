@@ -7,17 +7,13 @@ function ConventionAreaForm() {
 
     const { addConventionArea } = useContext(ConventionContext);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const newArea = { location_name: locationName, venue: venue};
         
-        try {
-            await addConventionArea(newArea);
-            setLocationName("");
-            setVenue("");
-        } catch (error) {
-            console.error("Error submitting form:", error);
-        }
+        addConventionArea(newArea);
+        setLocationName("");
+        setVenue("");
     };
 
     return (
