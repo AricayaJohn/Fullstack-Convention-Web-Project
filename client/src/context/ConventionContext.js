@@ -84,20 +84,20 @@ export function ConventionProvider({ children }) {
         }
     }, [])
 
-    const fetchConventionById = useCallback( async (id) => {
-        try {
-            const response = await fetch(`/conventions/${id}`);
-            if (!response.ok) throw new Error("Failed to fetch convention");
-            const data = await response.json();
-            setConventions((prev) => 
-                prev.map((convention) => (convention.id === id ? data : convention))
-        );
-        return data;
-        } catch (error) {
-            setError("Error fetching convention by ID: " + error.message);
-            throw error;
-        }
-    }, [])
+    // const fetchConventionById = useCallback( async (id) => {
+    //     try {
+    //         const response = await fetch(`/conventions/${id}`);
+    //         if (!response.ok) throw new Error("Failed to fetch convention");
+    //         const data = await response.json();
+    //         setConventions((prev) => 
+    //             prev.map((convention) => (convention.id === id ? data : convention))
+    //     );
+    //     return data;
+    //     } catch (error) {
+    //         setError("Error fetching convention by ID: " + error.message);
+    //         throw error;
+    //     }
+    // }, [])
 
     const fetchHostsByConventionId = useCallback(async (conventionId) => {
         try{
@@ -225,7 +225,7 @@ export function ConventionProvider({ children }) {
                     updateConventionArea,
                     addConventionArea,
                     deleteConventionArea,
-                    fetchConventionById,
+                    // fetchConventionById,
                     fetchHostsByConventionId,
                     addHost,
                     deleteHost,
