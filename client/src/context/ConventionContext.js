@@ -145,25 +145,18 @@ export function ConventionProvider({ children }) {
             .catch(() => setError("Error deleting host"));
     }, []);
 
-    const addConvention = useCallback(async (newConvention) => {
-        try {
-            const response = await fetch('/conventions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newConvention),
-            });
-            if (!response.ok) throw new Error("Failed to add convention");
-            const savedConvention = await response.json();
-
-            setConventions((prevConventions) => [...prevConventions, savedConvention]);
-
-            return savedConvention;
-        } catch (error) {
-            setError("Error adding convention: " + error.message);
-            throw error;
-        }
+    const addConvention = useCallback((newConvention) => {
+        fetch(`/hosts/${id}`, { method: 'DELETE' })
+            .then((response) => {
+                if (response.ok) {
+                    setHosts((prevHosts) => prevHosts.filter((host) => host.id !== id));
+                    setSelectedConventionHosts((prevSelectedHosts) => 
+                        prevSelectedHosts.filter((host) => host.id !== id)
+                    );
+                } else {
+                    setError("Failed to delete host");
+                }
+            })
     }, [])
 
     const deleteConvention = useCallback(async (id) => {
