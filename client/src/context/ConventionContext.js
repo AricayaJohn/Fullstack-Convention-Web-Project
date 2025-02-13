@@ -207,6 +207,24 @@ export function ConventionProvider({ children }) {
         .catch(() => setError("Error updating convention"))
     }, [])
 
+    const HostsByAreaId = useCallback((areaId) => {
+        return fetch(`/hosts_by_area/${areaId}`)
+        .then((response) => {
+            if (!response.ok) {
+                setError("Failed to fetch hosts by area");
+                return null;
+            }
+            return response.json();
+        })
+        .then((data) => {
+            return data;
+        })
+        .catch((error) => {
+            console.error("Error fetching hosts by area:", error);
+            return null;
+        });
+    }, [])
+
         return (
             <ConventionContext.Provider
                 value={{
@@ -222,6 +240,7 @@ export function ConventionProvider({ children }) {
                     addHost,
                     deleteHost,
                     addConvention,
+                    HostsByAreaId,
                     updatedConvention,
                     deleteConvention,
                     error,
