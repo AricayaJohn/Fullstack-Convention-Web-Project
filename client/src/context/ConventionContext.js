@@ -182,28 +182,29 @@ export function ConventionProvider({ children }) {
             .catch(() => setError("Error deleting convention"));
     }, []);
 
-    const updatedConvention = useCallback(async (id, updatedData) => {
-        try {
-            const response = await fetch(`/conventions/${id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedData),
-            });
-            if (!response.ok) throw new Error("Failed to update convention");
-            const updatedConvention = await response.json();
-
-            setConventions((prevConventions) =>
-                prevConventions.map((convention) => 
-                    convention.id === id ? updatedConvention : convention
+    const updatedConvention = useCallback((id, updatedData) => {
+        fetch(`/conventions/${id}`, {
+            method: 'PATCH',
+            haeders: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                setError("Failed to update convention");
+                return;
+            }
+            return response.json();
+        })
+        .then((updatedConvention) => {
+            if (updatedConvention) {
+                setConventions((prevConventions) => 
+                    prevConventions.map((convention) => 
+                        convention.id === id ? updatedConvention: convention
+                    )
                 )
-            );
-            return updatedConvention;
-        } catch (error) {
-            setError("Error updating convention: " + error.message);
-            throw error;
-        }
+            }
+        })
+        .catch(() => setError("Error updating convention"))
     }, [])
 
         return (
