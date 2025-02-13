@@ -82,20 +82,22 @@ export function ConventionProvider({ children }) {
         });
     }, []);
 
-    // const fetchConventionById = useCallback( async (id) => {
-    //     try {
-    //         const response = await fetch(`/conventions/${id}`);
-    //         if (!response.ok) throw new Error("Failed to fetch convention");
-    //         const data = await response.json();
-    //         setConventions((prev) => 
-    //             prev.map((convention) => (convention.id === id ? data : convention))
-    //     );
-    //     return data;
-    //     } catch (error) {
-    //         setError("Error fetching convention by ID: " + error.message);
-    //         throw error;
-    //     }
-    // }, [])
+    const fetchConventionById = useCallback((id) => {
+        fetch(`/conventions/${id}`)
+            .then((response) => response.ok ? response.json() : null)
+            .then((data) => {
+                if (data) {
+                    setConventions((prev) => 
+                        prev.map((convention) => (convention.id === id ? data : convention))
+                    );
+                } else {
+                    setError("Failed to fetch convention");
+                }
+            })
+            .catch(() => {
+                setError("Error fetching convention by ID");
+            });
+    }, []);
 
     const fetchHostsByConventionId = useCallback(async (conventionId) => {
         try{
