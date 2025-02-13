@@ -6,8 +6,11 @@ function HostsInAreaPage() {
     const { areaId } = useParams();
     const { HostsByAreaId } = useContext(ConventionContext);
     const [ hosts, setHosts ] = useState([])
-}
 
+    useEffect(() => {|
+        HostsByAreaId(areaId).then(setHosts);
+    }, [areaId, HostsByAreaId]);
+    
     return (
         <div>
             <h1>Hosts in Area</h1>
@@ -26,3 +29,4 @@ function HostsInAreaPage() {
             <Link to="/">Back to Home</Link>
         </div>
     );
+}
