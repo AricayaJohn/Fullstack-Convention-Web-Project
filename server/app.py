@@ -142,8 +142,7 @@ class HostCompaniesById(Resource):
 class Conventions(Resource):
     def get(self):
         conventions = Convention.query.all()
-        return [convention.to_dict(only=('id', 'convention_name', 'days',
-        'convention_area_id', 'host_company_id')) for convention in conventions]
+        return [convention.to_dict() for convention in conventions]
 
     def post(self):
         data = request.get_json()
@@ -199,7 +198,7 @@ class HostByArea(Resource):
         if not area:
             return {'error': 'ConventionArea not found'}, 404
         hosts = area.host_companies
-        return [host.to_dict(only=('id', 'name', 'industry')) for host in hosts], 200
+        return [host.to_dict() for host in hosts], 200
 
 
 api.add_resource(ConventionAreas, '/convention_areas')
