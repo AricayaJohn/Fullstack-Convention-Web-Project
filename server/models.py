@@ -22,10 +22,7 @@ class HostCompany(db.Model, SerializerMixin):
     name = db.Column(db.String, nullable=False)
     industry = db.Column(db.String, nullable=False)
 
-    conventions = db.relationship('Convention', backref='host_company')
-    convention_names = association_proxy('conventions', 'convention_name')
-
-    serialize_rules = ('-conventions.host_company',)
+    conventions = db.relationship('Convention', backref='host_company', lazy=True)
 
     @validates('name')
     def validate_name(self, key, name):
