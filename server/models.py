@@ -46,7 +46,7 @@ class Convention(db.Model, SerializerMixin):
     convention_area_id = db.Column(db.Integer, db.ForeignKey('convention_areas.id'))
     host_company_id = db.Column(db.Integer, db.ForeignKey('host_companies.id'))
 
-    serialize_rules = ('-convention_area.conventions', '-host_company.conventions')
+    serialize_rules = ('-convention_area.conventions', '-host_company.conventions', '-convention_areas.convention', '-host_companies.convention' )
 
     @validates('days')
     def validate_days(self, key, days):
