@@ -28,7 +28,7 @@ def index():
 class ConventionAreas(Resource):
     def get(self):
         areas = ConventionArea.query.all()
-        return [area.to_dict(only=('id', 'location_name', 'venue')) for area in areas]
+        return [area.to_dict() for area in areas]
     
     def post(self):
         data = request.get_json()
@@ -43,8 +43,6 @@ class ConventionAreas(Resource):
         except ValueError as e:
             print('Error', e)
             return make_response({'errors': ['validation errors']}, 400)
-
-api.add_resource(ConventionAreas, '/convention_areas')
 
 class ConventionAreasById(Resource):
     def get(self, id):
@@ -75,8 +73,6 @@ class ConventionAreasById(Resource):
             db.session.commit()
             return '', 204
         return {'error': 'ConventionArea not found'}, 404
-
-api.add_resource(ConventionAreasById, '/convention_areas/<int:id>')
 
 class Hosts(Resource):
     def get(self):
@@ -111,7 +107,6 @@ class Hosts(Resource):
         except ValueError:
             return make_response({'errors': ['validation errors']}, 400)
 
-api.add_resource(Hosts, '/hosts')
 
 class HostCompaniesById(Resource):
     def get(self, id):
@@ -143,8 +138,6 @@ class HostCompaniesById(Resource):
             return '', 204
         return {'error': 'HostCompany not found'}, 404
 
-api.add_resource(HostCompaniesById, '/hosts/<int:id>')
-
 class Conventions(Resource):
     def get(self):
         conventions = Convention.query.all()
@@ -167,7 +160,6 @@ class Conventions(Resource):
             print('Error', e)
             return make_response({'errors': ['validation errors']}, 400)
 
-api.add_resource(Conventions, '/conventions')
 
 class ConventionsById(Resource):
     def get(self,id):
@@ -199,7 +191,6 @@ class ConventionsById(Resource):
             return '', 204
         return {'error': 'Convention not found'}, 404
 
-api.add_resource(ConventionsById, '/conventions/<int:id>')
 
 class HostByArea(Resource):
     def get(self, area_id):
@@ -209,7 +200,18 @@ class HostByArea(Resource):
         hosts = area.host_companies
         return [host.to_dict(only=('id', 'name', 'industry')) for host in hosts], 200
 
+
+api.add_resource(ConventionAreas, '/convention_areas')
+api.add_resource(ConventionAreasById, '/convention_areas/<int:id>')
+
+api.add_resource(Conventions, '/conventions')
+api.add_resource(ConventionsById, '/conventions/<int:id>')
+
+api.add_resource(Hosts, '/hosts')
+api.add_resource(HostCompaniesById, '/hosts/<int:id>')
+
 api.add_resource(HostByArea, '/hosts_by_area/<int:area_id>')
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
