@@ -81,12 +81,12 @@ class Hosts(Resource):
             convention = Convention.query.get(convention_id)
             if convention and convention.host_company_id:
                 host = HostCompany.query.get(convention.host_company_id)
-                return [host.to_dict(only=('id', 'name', 'industry'))], 200
+                return [host.to_dict()], 200
             else:
                 return [], 200
         else:
             hosts = hostCompany.query.all()
-            return [host.to_dict(only=('id', 'name', 'industry')) for host in hosts], 200
+            return [host.to_dict() for host in hosts], 200
 
     def post(self):
         data = request.get_json()
@@ -98,10 +98,11 @@ class Hosts(Resource):
             db.session.add(new_host)
             db.session.commit()
 
-            convention = Convention.query.get(data['convention_id'])
-            if convention:
-                convention.host_company_id = new_host.id
-                db.session.commit()
+            if 'conventiona_area_id' in data:
+                area = ConventionArea.query.get(data['convention_area_id'])
+                if area:
+                    area.host_companies.append(new_host)
+                    db.session.commit()
 
             return make_response(new_host.to_dict(), 201)
         except ValueError:
