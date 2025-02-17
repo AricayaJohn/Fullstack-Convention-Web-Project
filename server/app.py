@@ -201,7 +201,7 @@ class ConventionsById(Resource):
 
 api.add_resource(ConventionsById, '/conventions/<int:id>')
 
-class HostByArea(Resouce):
+class HostByArea(Resource):
     def get(self, area_id):
         area = ConventionArea.query.get(area_id)
         if not area:
@@ -209,7 +209,7 @@ class HostByArea(Resouce):
         hosts = area.host_companies
         return [host.to_dict(only=('id', 'name', 'industry')) for host in hosts], 200
 
-api.add_resource(HostByArea, 'hosts_by_area/<int:area_id>')
+api.add_resource(HostByArea, '/hosts_by_area/<int:area_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

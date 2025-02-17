@@ -3,12 +3,6 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from config import db
 
-# Join table for many-to-many relationship between ConventionArea and HostCompany
-convention_area_host = db.Table(
-    'convention_area_host',
-    db.Column('convention_area_id', db.Integer, db.ForeignKey('convention_areas.id'), primary_key=True),
-    db.Column('host_company_id', db.Integer, db.ForeignKey('host_companies.id'), primary_key=True)
-)
 
 class ConventionArea(db.Model, SerializerMixin):
     __tablename__ = 'convention_areas'
@@ -17,10 +11,9 @@ class ConventionArea(db.Model, SerializerMixin):
     location_name = db.Column(db.String, nullable=False)
     venue = db.Column(db.String, nullable=False)
 
-    conventions = db.relationship('Convention', backref='convention_area', cascade='all,delete-orphan')
-    host_companies = db.relationship('HostCompany', secondary=convention_area_host, backref='convention_areas')
+    host_companies = db.relationship('HostCompany', secondary='conventions', viewonly=True)
 
-    serialize_rules = ('-conventions.convention_area', '-host_companies.convention_areas')
+    serialize_rules = ('-conventions.convention_area',)
 
 class HostCompany(db.Model, SerializerMixin):
     __tablename__ = 'host_companies'
