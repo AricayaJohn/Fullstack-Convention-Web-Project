@@ -5,7 +5,7 @@ import HomePage from "./HomePage";
 import ConventionAreaForm from "./ConventionAreaForm";
 import ConventionsPage from "./ConventionsPage";
 import HostsPage from "./HostsPage";
-import HostInAreaPage from "./HostInAreaPage";
+import HostsInAreaPage from "./HostsInAreaPage";
 
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
             <Route path="/add-convention-area" element={<ConventionAreaForm/>} />
             <Route path="/conventions/:areaId" element={<ConventionsPage/>} />
             <Route path="/hosts/:conventionId" element={<HostsPage/>} />
-            <Route path="/host_in_area/:areaId" element={<HostInAreaPage />} />
+            <Route path="/hosts_in_area/:areaId" element={<HostsInAreaPage />} />
           </Routes>
         </main>
       </Router>

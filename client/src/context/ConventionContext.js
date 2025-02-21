@@ -49,18 +49,18 @@ export function ConventionProvider({ children }) {
 
     const deleteConventionArea = useCallback((id) => {
         fetch(`/convention_areas/${id}`, { method: "DELETE" })
-        .then((response) => {
-            if (response.ok) {
-                setConventionAreas((prevAreas) => 
-                    prevAreas.filter((area) => area.id !== id)
-            );
-            } else {
-                setError("Failed to delete convention area");
-            }
-        })
-        .catch(() => {
-            setError("Error deleting convention area");
-        });
+            .then((response) => {
+                if (response.ok) {
+                    setConventionAreas((prevAreas) => 
+                        prevAreas.filter((area) => area.id !== id)
+                );
+                } else {
+                    setError("Failed to delete convention area");
+                }   
+            })
+            .catch(() => {
+                    setError("Error deleting convention area");
+            });
     }, []);
 
     const addConventionArea = useCallback((newArea) => {
@@ -133,7 +133,7 @@ export function ConventionProvider({ children }) {
     const deleteHost = useCallback((id) => {
         fetch(`/hosts/${id}`, { method: 'DELETE'})
             .then((response) => {
-                if (response) {
+                if (response.ok) {
                     setHosts((prevHosts) => prevHosts.filter((host) => host.id !== id));
                     setSelectedConventionHosts((prevSelectedHosts) => 
                         prevSelectedHosts.filter((host) => host.id !== id)
@@ -201,7 +201,7 @@ export function ConventionProvider({ children }) {
                     prevConventions.map((convention) => 
                         convention.id === id ? updatedConvention: convention
                     )
-                )
+                );
             }
         })
         .catch(() => setError("Error updating convention"))
@@ -209,21 +209,21 @@ export function ConventionProvider({ children }) {
 
     const HostsByAreaId = useCallback((areaId) => {
         return fetch(`/hosts_by_area/${areaId}`)
-        .then((response) => {
-            if (!response.ok) {
-                setError("Failed to fetch hosts by area");
+            .then((response) => {
+                if (!response.ok) {
+                    setError("Failed to fetch hosts by area");
+                    return null;
+                }
+                return response.json();
+            })
+            .then((data) => {
+                return data;
+            })
+            .catch((error) => {
+                console.error("Error fetching hosts by area:", error);
                 return null;
-            }
-            return response.json();
-        })
-        .then((data) => {
-            return data;
-        })
-        .catch((error) => {
-            console.error("Error fetching hosts by area:", error);
-            return null;
-        });
-    }, [])
+            });
+    }, []);
 
         return (
             <ConventionContext.Provider

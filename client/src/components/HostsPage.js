@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import AddHostForm from "./AddHostForm";
 import { ConventionContext } from "../context/ConventionContext";
@@ -27,7 +27,7 @@ function HostsPage() {
 
     return (
         <div>
-            <h1>Host for {conventionName}</h1>
+            <h1>Host</h1>
             {selectedConventionHosts.length > 0 ? (
                 <ul>
                     {selectedConventionHosts.map((host) => (

@@ -30,3 +30,6 @@ function HostsInAreaPage() {
         </div>
     );
 }
+
+
+export default HostsInAreaPage;
