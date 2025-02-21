@@ -82,7 +82,7 @@ export function ConventionProvider({ children }) {
         });
     }, []);
 
-    // const fetchConventionById = useCallback((id) => {
+    // const ConventionById = useCallback((id) => {
     //     fetch(`/conventions/${id}`)
     //         .then((response) => response.ok ? response.json() : null)
     //         .then((data) => {
@@ -185,7 +185,7 @@ export function ConventionProvider({ children }) {
     const updatedConvention = useCallback((id, updatedData) => {
         fetch(`/conventions/${id}`, {
             method: 'PATCH',
-            haeders: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedData),
         })
         .then((response) => {
