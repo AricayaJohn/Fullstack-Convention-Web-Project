@@ -81,11 +81,11 @@ class Hosts(Resource):
             convention = Convention.query.get(convention_id)
             if convention and convention.host_company_id:
                 host = HostCompany.query.get(convention.host_company_id)
-                return [host.to_dict()], 200
+                return [], 200
             else:
                 return [], 200
         else:
-            hosts = hostCompany.query.all()
+            hosts = HostCompany.query.all()
             return [host.to_dict() for host in hosts], 200
 
     def post(self):

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 from app import app
-from models import db, Convention, ConventionArea, HostCompany, convention_area_host
+from models import db, Convention, ConventionArea, HostCompany
+
 def clear_data():
     Convention.query.delete()
     ConventionArea.query.delete()
     HostCompany.query.delete()
 
-    db.session.execute(convention_area_host.delete())
     db.session.commit()
 
 def add_convention_areas():

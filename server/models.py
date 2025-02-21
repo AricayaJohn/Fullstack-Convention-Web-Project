@@ -11,9 +11,9 @@ class ConventionArea(db.Model, SerializerMixin):
     location_name = db.Column(db.String, nullable=False)
     venue = db.Column(db.String, nullable=False)
 
-    host_companies = db.relationship('HostCompany', secondary='conventions', viewonly=True)
-
     serialize_rules = ('-conventions.convention_area',)
+    
+    host_companies = db.relationship('HostCompany', secondary='conventions', viewonly=True)
 
 class HostCompany(db.Model, SerializerMixin):
     __tablename__ = 'host_companies'
