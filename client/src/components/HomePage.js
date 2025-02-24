@@ -8,7 +8,7 @@ function HomePage() {
 
     return (
         <div>
-            <h1> Convention Areas</h1>
+            <h1> Areas</h1>
             {conventionAreas.length > 0 ? (
                 conventionAreas.map((area) => (
                     <ConventionAreaCard

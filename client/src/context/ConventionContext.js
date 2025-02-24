@@ -82,23 +82,6 @@ export function ConventionProvider({ children }) {
         });
     }, []);
 
-    // const ConventionById = useCallback((id) => {
-    //     fetch(`/conventions/${id}`)
-    //         .then((response) => response.ok ? response.json() : null)
-    //         .then((data) => {
-    //             if (data) {
-    //                 setConventions((prev) => 
-    //                     prev.map((convention) => (convention.id === id ? data : convention))
-    //                 );
-    //             } else {
-    //                 setError("Failed to fetch convention");
-    //             }
-    //         })
-    //         .catch(() => {
-    //             setError("Error fetching convention by ID");
-    //         });
-    // }, []);
-
     const HostsByConventionId = useCallback((conventionId) => {
         fetch(`/hosts?convention_id=${conventionId}`)
             .then((response) => response.json())
@@ -235,7 +218,6 @@ export function ConventionProvider({ children }) {
                     updateConventionArea,
                     addConventionArea,
                     deleteConventionArea,
-                    // fetchConventionById,
                     HostsByConventionId,
                     addHost,
                     deleteHost,
