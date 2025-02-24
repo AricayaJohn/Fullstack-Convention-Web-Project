@@ -81,7 +81,7 @@ class Hosts(Resource):
             convention = Convention.query.get(convention_id)
             if convention and convention.host_company_id:
                 host = HostCompany.query.get(convention.host_company_id)
-                return [], 200
+                return [host.to_dict()], 200
             else:
                 return [], 200
         else:
